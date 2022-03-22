@@ -24,21 +24,26 @@ function marActionStateSimItem(action, id) {
 const key = 'inputArrayState';
 inputArray.forEach((el) => {
   el.addEventListener('change', (event) => {
-    let inputArrayStore = JSON.parse(sessionStorage.getItem(key));
+    let inputArrayStore = JSON.parse(sessionStorage.getItem(key)); // get store
 
-    console.log(inputArrayStore);
     if (inputArrayStore === null) {
-      inputArrayStore = [];
+      // check store initialized
+      inputArrayStore = []; // if not initialized
     }
-    const action = event.target.checked;
-    const id = event.target.id;
-    const initNewState = new marActionStateSimItem(action, id);
+    const action = event.target.checked; // state
+    const id = event.target.id; // subject
+    const initNewState = new marActionStateSimItem(action, id); // state object to upsert
 
-    if (inputArrayStore.some((itm) => itm.id === event.target.id)) {
-      inputArrayStore.find((itm) => itm.id === event.target.id).action =
-        event.target.checked;
+    if (
+      inputArrayStore.some((itm) => {
+        return itm.id === event.target.id;
+      }) // true / false
+    ) {
+      inputArrayStore.find((itm) => {
+        return itm.id === event.target.id;
+      }).action = event.target.checked; // if item exists update
     } else {
-      inputArrayStore = [...inputArrayStore, initNewState];
+      inputArrayStore = [...inputArrayStore, initNewState]; // if item does not exist append
     }
 
     sessionStorage.setItem(key, JSON.stringify(inputArrayStore));
